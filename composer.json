@@ -1,0 +1,18 @@
+{
+    "name": "3iwow/neguentropia",
+    "authors": [
+        {
+            "name": "Cyril",
+            "email": "cyril.fabby@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Chakhal\\Neguentropia\\": "src/App/classes"
+        }
+    },
+    "require": {
+        "league/flysystem": "^1.0"
+    }
+
+}
