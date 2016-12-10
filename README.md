@@ -5,11 +5,11 @@
 - kvm
 - vagrant (install from official website)
 - vagrant plugin install vagrant-libvirt
-- vagrant plugin install vagrant-nfs_guest
 
 # Launch
 - sudo start-statd
 - sudo service rpc.statd start
+- sudo service libvirtd start
 - ...
 - vagrant up
 

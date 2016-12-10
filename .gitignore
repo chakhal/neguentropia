@@ -8,4 +8,4 @@
 /vendor
 
 # APP
-\_*
+/src/_*

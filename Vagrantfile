@@ -12,14 +12,12 @@ Vagrant.configure("2") do |config|
   config.vm.box = "debian/jessie64"
   config.vm.box_check_update = true
 
-  config.vm.network "public_network"
+  config.vm.network "public_network", interface:"eth0"
   
   config.vm.synced_folder ".", "/vagrant",
     :nfs => true,
     :nfs_version => 4,
     :nfs_udp => false
-
-#  config.vm.synced_folder ".", "/vagrant", :nfs => { :mount_options => ["dmode=777","fmode=777"] }
 
 
   # VM NEGUENTROPIA
@@ -40,8 +38,22 @@ Vagrant.configure("2") do |config|
   end
 
 
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+#  config.vm.provision "shell", inline: <<-SHELL
+#    sudo su -
+#    echo "deb http://packages.dotdeb.org jessie all" > /etc/apt/sources.list.d/dotdeb.list
+#    wget -O- https://www.dotdeb.org/dotdeb.gpg | apt-key add -
+#    apt update
+#
+#  SHELL
 
 
+  config.vm.provision "ansible" do |ansible|
+    ansible.verbose = "v"
+    ansible.playbook = "_ANSIBLE/playbooks/install_server.yml"
+  end
 
 
 
@@ -54,21 +66,6 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
 
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
-  # config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
-  #
-  # View the documentation for the provider you are using for more
-  # information on available options.
-
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
   # such as FTP and Heroku are also available. See the documentation at
   # https://docs.vagrantup.com/v2/push/atlas.html for more information.
@@ -76,11 +73,5 @@ Vagrant.configure("2") do |config|
   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
   # end
 
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-  # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+
 end
