@@ -1,2 +1,11 @@
-/vendor/
-_*
+# DEV
+/.vagrant
+/node_modules
+
+# IDE
+
+# PACKAGES
+/vendor
+
+# APP
+\_*
