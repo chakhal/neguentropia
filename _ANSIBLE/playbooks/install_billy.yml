@@ -14,3 +14,8 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Install nodejs
+  script: scripts/install-nodejs.sh {{ node_version}}
+  args:
+    creates: /opt/provisioned/node-{{ node_version }}

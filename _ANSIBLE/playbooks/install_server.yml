@@ -46,9 +46,25 @@
         upgrade: dist
 
 
-    - name: Install packages
+    - name: Init run_once folder
+      file:
+        path: /opt/provisioned
+        state: directory
+        mode: 0644
+
+    - name: Init download folder
+      file:
+        path: /opt/download
+        state: directory
+        mode: 0644
+
+    - name: Install packages - commons
       apt: name={{ item }} state=installed force=yes
       with_items: "{{ sys_packages }}"
+
+    - name: Install specific packages
+      apt: name={{ item }} state=installed force=yes
+      with_items: "{{ host_packages }}"
 
     - include: install_{{ hostname }}.yml
       tags: [ custom ]

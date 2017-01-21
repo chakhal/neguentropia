@@ -16,4 +16,6 @@ RESULT=$?
 rm composer-setup.php
 
 mv composer.phar /usr/local/bin/composer
+
+touch /opt/provisioned/composer
 exit $RESULT
