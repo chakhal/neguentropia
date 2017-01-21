@@ -12,31 +12,48 @@ Vagrant.configure("2") do |config|
   config.vm.box = "debian/jessie64"
   config.vm.box_check_update = true
 
-  config.vm.network "public_network", interface:"eth0"
   
-  config.vm.synced_folder ".", "/vagrant",
-    :nfs => true,
-    :nfs_version => 4,
-    :nfs_udp => false
-
+#  config.ssh.insert_key = false
 
   # VM NEGUENTROPIA
   config.vm.define "neguentropia" do |config|
-#    config.vm.hostname = "neguentropia.dev"
 
-    # eth1
+    config.vm.synced_folder ".", "/srv/neguentropia",
+      :nfs => true,
+      :nfs_version => 4,
+      :nfs_udp => false
+      
+    config.vm.network "public_network", interface:"eth0"
     config.vm.network "private_network", ip: "10.0.0.10"
-    config.vm.network "forwarded_port", guest: 80, host: 8080
-
-    config.vm.provider :libvirt do |libvirt|
-      libvirt.driver = "kvm"
-      libvirt.memory = 2048
-      libvirt.cpus = 1
-    end
 
 
   end
 
+  # VM billy
+  config.vm.define "billy" do |config|
+
+    config.vm.synced_folder ".", "/srv/billy",
+      :nfs => true,
+      :nfs_version => 4,
+      :nfs_udp => false
+
+    config.vm.network "public_network", interface:"eth1"
+    config.vm.network "private_network", ip: "10.0.0.11"
+
+  end
+
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.driver = "kvm"
+    libvirt.memory = 2048
+    libvirt.cpus = 1
+  end
+  config.vm.provision "ansible" do |ansible|
+    ansible.verbose = "v"
+    ansible.playbook = "_ANSIBLE/playbooks/install_server.yml"
+    ansible.inventory_path = "_ANSIBLE/host"
+  end
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
@@ -49,11 +66,6 @@ Vagrant.configure("2") do |config|
 #
 #  SHELL
 
-
-  config.vm.provision "ansible" do |ansible|
-    ansible.verbose = "v"
-    ansible.playbook = "_ANSIBLE/playbooks/install_server.yml"
-  end
 
 
 

@@ -1,0 +1,16 @@
+---
+- name: Write nginx config files
+  template:
+    src: configs/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Write {{ host }} config files
+  template:
+    src: configs/nginx/{{ hostname }}.conf
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: 0644

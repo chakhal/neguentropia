@@ -1,0 +1,29 @@
+---
+- name: Write nginx config files
+  template:
+    src: configs/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Write api.{{ host }} config files
+  template:
+    src: configs/nginx/{{ hostname }}.conf
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Write php.ini
+  template:
+    src: configs/php.ini
+    dest: /etc/php/7.0/fpm/php.ini
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install composer
+  script: scripts/install-composer.sh
+  args:
+    creates: /usr/local/bin/composer

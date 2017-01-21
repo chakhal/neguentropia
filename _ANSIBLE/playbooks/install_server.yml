@@ -6,24 +6,38 @@
 
   tasks:
     - name: Install users
-      user: name={{ item }} state=present
+      user: name={{ item }} state=present shell=/bin/bash
+      with_items: "{{ sys_users }}"
+
+    - name: Ensure .ssh folder exists
+      file: path=~{{ item }}/.ssh state=directory
+      with_items: "{{ sys_users }}"
+
+    - name: Set authorized_keys
+      template:
+        src: configs/authorized_keys
+        dest: ~{{ item }}/.ssh/authorized_keys
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: 0600
+      with_items: "{{ sys_users }}" 
+
+    - name: Install sudoers
+      template:
+        src: configs/sudoers
+        dest: /etc/sudoers.d/{{ item }}
       with_items:
-        - neguentropia
-
-    - name: Authorized_key - root
-      authorized_key:
-        user: root
-        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-
-    - name: Authorized_key - neguentropia
-      authorized_key:
-        user: neguentropia
-        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        - "{{ hostname }}"
 
     - name: dotdeb apt key
       apt_key:
         url: "https://www.dotdeb.org/dotdeb.gpg"
         validate_certs: no
+        state: present
+
+    - name: dotdeb aptrepository
+      apt_repository:
+        repo: deb http://packages.dotdeb.org jessie all
         state: present
 
 
@@ -34,20 +48,8 @@
 
     - name: Install packages
       apt: name={{ item }} state=installed force=yes
-      with_items:
-        - nginx
-        - php7.0
-        - php7.0-fpm
-        - php7.0-curl
-        - php7.0-json
-        - php7.0-gd
-        - php7.0-mcrypt
-        - php7.0-msgpack
-        - php7.0-memcached
-        - php7.0-intl
-        - php7.0-sqlite3
-        - php7.0-gmp
-        - php7.0-geoip
-        - php7.0-mbstring
-        - php7.0-xml
-        - php7.0-zip
+      with_items: "{{ sys_packages }}"
+
+    - include: install_{{ hostname }}.yml
+      tags: [ custom ]
+
