@@ -26,7 +26,14 @@ ssh root/billy@10.0.0.11 billy.dev
 
 # neguentropia
 
-php -S 0.0.0.0:2000 /src/routing.php
+~~php -S 0.0.0.0:2000 /src/routing.php~~
+
+# billy
+
+SSH tunnel -L4444:localhost:4444
+/srv/billy/src/Frontends/billy/npm run dev
+
+host: localhost:4444
 
 # system dependencies
 
