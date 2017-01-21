@@ -1,10 +1,12 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+// Same as error_reporting(E_ALL);
+ini_set('error_reporting', E_ALL);
 
-require_once __DIR__.'/helpers.php';
-$env = include __DIR__.'/env.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
+require_once __DIR__.'/../helpers.php';
+$env = include __DIR__.'/../env.php';
 
 
 // $fly = new League\Flysystem\File();
@@ -22,9 +24,10 @@ if (!array_key_exists('HTTP_ORIGIN', $_SERVER)) {
 
 try {
     $API = new Chakhal\Neguentropia\Api\FileApi(
-        ltrim($_SERVER['REQUEST_URI'],
-        '/'), $_SERVER['HTTP_ORIGIN'],
-        env_get('path.root')
+                ltrim($_SERVER['REQUEST_URI'],'/'),
+                $_SERVER['HTTP_ORIGIN'],
+                env_get('path.root'
+            )
     );
 
     echo $API->processAPI();

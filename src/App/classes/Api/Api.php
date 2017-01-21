@@ -38,8 +38,10 @@ abstract class Api
      * Allow for CORS, assemble and pre-process the data
      */
     public function __construct($request) {
-        header("Access-Control-Allow-Orgin: *");
+        header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods: *");
+        header("Access-Control-Allow-Headers: *");
+        // header("Access-Control-Allow-Credentials: true");
         header("Content-Type: application/json");
 
         $this->args = explode('/', rtrim($request, '/'));
@@ -65,6 +67,7 @@ abstract class Api
         case 'POST':
             $this->request = $this->_cleanInputs($_POST);
             break;
+        case 'OPTIONS':
         case 'GET':
             $this->request = $this->_cleanInputs($_GET);
             break;
@@ -81,6 +84,10 @@ abstract class Api
     }
 
     public function processAPI() {
+        if ($this->method == 'OPTIONS') {
+            return [];
+        } 
+
         if (method_exists($this, $this->endpoint)) {
             return $this->_response($this->{$this->endpoint}($this->args));
         }
@@ -90,13 +97,13 @@ abstract class Api
     private function _response($data, $status = 200) {
         header("HTTP/1.1 " . $status . " " . $this->_requestStatus($status));
 
-        $data['_debug'] = [
-                'args' => $this->args,
-                'verb' => $this->verb,
-                'method' => $this->method,
-                'endpoint' => $this->endpoint,
-                'request' => $this->request
-        ];
+        // $data['_debug'] = [
+        //         'args' => $this->args,
+        //         'verb' => $this->verb,
+        //         'method' => $this->method,
+        //         'endpoint' => $this->endpoint,
+        //         'request' => $this->request
+        // ];
 
         return json_encode($data);
     }
