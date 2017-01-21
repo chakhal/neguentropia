@@ -2,3 +2,8 @@
 hostname: billy
 host: billy.dev
 
+host_packages:
+    - nginx
+    - build-essential
+
+node_version: v6.9.4
