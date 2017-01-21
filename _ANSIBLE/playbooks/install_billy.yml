@@ -19,3 +19,23 @@
   script: scripts/install-nodejs.sh {{ node_version}}
   args:
     creates: /opt/provisioned/node-{{ node_version }}
+
+- name: Npm global packages
+  npm:
+    name: "{{ item }}"
+    global: yes
+  with_items:
+    - yarn
+    - vue-cli
+
+- file:
+    src: '/usr/local/node/bin/{{ item }}'
+    dest: '/usr/local/bin/{{ item }}'
+    state: link
+  with_items:
+    - vue
+    - vue-init
+    - vue-list
+    - vue-build
+    - yarn
+    - yarnpkg

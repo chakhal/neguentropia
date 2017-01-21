@@ -11,5 +11,4 @@ ln -s /usr/local/node-$NODE_VERSION-linux-x64 /usr/local/node
 ln -s /usr/local/node-$NODE_VERSION-linux-x64/bin/node /usr/local/bin/node
 ln -s /usr/local/node-$NODE_VERSION-linux-x64/bin/npm /usr/local/bin/npm
 
-
 touch /opt/provisioned/nodejs-${NODE_VERSION}
